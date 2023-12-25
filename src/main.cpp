@@ -4,9 +4,64 @@
 
 #include "../include/ofApp.hpp"
 #include "ofMain.h"
+#include "../include/mapfplan.hpp"
 
 const std::regex r_config = std::regex(R"(^\d+:(.+))");
 const std::regex r_pos = std::regex(R"(\((\d+),(\d+)\),)");
+
+
+void readSetResult(const std::string& result_file, MAPFPlan* plan)
+{
+  std::ifstream file(result_file);
+  if (!file) {
+    std::cout << "error@main," << "file " << result_file << " is not found." << std::endl;
+    std::exit(1);
+  };
+
+  std::regex r_agents    = std::regex(R"(agents=(.+))");
+  std::regex r_solver    = std::regex(R"(solver=(.+))");
+  std::regex r_solved    = std::regex(R"(solved=(\d))");
+  std::regex r_soc       = std::regex(R"(soc=(\d+))");
+  std::regex r_makespan  = std::regex(R"(makespan=(\d+))");
+  std::regex r_comp_time = std::regex(R"(comp_time=(\d+))");
+
+  std::string line;
+  std::smatch results;
+  while (getline(file, line)) {
+    // set agent num
+    if (std::regex_match(line, results, r_agents)) {
+      plan->num_agents = std::stoi(results[1].str());
+      continue;
+    }
+    // solver
+    if (std::regex_match(line, results, r_solver)) {
+      plan->solver = results[1].str();
+      continue;
+    }
+    // solved?
+    if (std::regex_match(line, results, r_solved)) {
+      plan->solved = (bool)std::stoi(results[1].str());
+      continue;
+    }
+    // soc
+    if (std::regex_match(line, results, r_soc)) {
+      plan->soc = std::stoi(results[1].str());
+      continue;
+    }
+    // makespan
+    if (std::regex_match(line, results, r_makespan)) {
+      plan->makespan = std::stoi(results[1].str());
+      continue;
+    }
+    // comp_time
+    if (std::regex_match(line, results, r_comp_time)) {
+      plan->comp_time = std::stoi(results[1].str());
+      continue;
+    }
+  }
+}
+
+
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +73,9 @@ int main(int argc, char *argv[])
               << std::endl;
     return 0;
   }
+
+  MAPFPlan* mapfPlan = new MAPFPlan;  // deleted in ofApp destructor
+  readSetResult(argv[2], mapfPlan);
 
   // load graph
   Graph G(argv[1]);
@@ -45,6 +103,6 @@ int main(int argc, char *argv[])
 
   // visualize
   ofSetupOpenGL(100, 100, OF_WINDOW);
-  ofRunApp(new ofApp(&G, &solution));
+  ofRunApp(new ofApp(&G, &solution, mapfPlan));
   return 0;
 }

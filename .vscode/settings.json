@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "*.ipp": "cpp",
+        "*.tcc": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "limits": "cpp",
+        "memory": "cpp",
+        "new": "cpp",
+        "numeric": "cpp",
+        "cmath": "cpp",
+        "utility": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp"
+    }
+}

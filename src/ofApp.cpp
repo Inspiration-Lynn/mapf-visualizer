@@ -32,9 +32,10 @@ static void printKeys()
   std::cout << "- esc : terminate" << std::endl;
 }
 
-ofApp::ofApp(Graph* _G, Solution* _P)
+ofApp::ofApp(Graph* _G, Solution* _P, MAPFPlan* _mapfP)
     : G(_G),
       P(_P),
+      mapfP(_mapfP),
       N(P->front().size()),
       T(P->size() - 1),
       goals(P->back()),
@@ -61,7 +62,9 @@ void ofApp::setup()
   ofBackground(Color::bg);
   ofSetCircleResolution(32);
   ofSetFrameRate(30);
+  std::string font_name = "MuseoModerno-VariableFont_wght.ttf";
   font.load("MuseoModerno-VariableFont_wght.ttf", font_size, true, false, true);
+  font_info.load(font_name, 10);
 
   // setup gui
   gui.setup();
@@ -205,6 +208,24 @@ void ofApp::draw()
       font.drawString(std::to_string(i), x - font_size / 2, y + font_size / 2);
     }
   }
+
+  // info
+  ofSetColor(Color::font_info);
+  int x = 220;
+  int y = 0;
+  font_info.drawString("solved by "
+                       + mapfP->solver
+                       + (mapfP->solved ? ", success" : ", failed"),
+                       x, y+=15);
+  font_info.drawString("agents: "
+                       + std::to_string(mapfP->num_agents), 
+                       x, y+=15);
+  font_info.drawString("comp_time: "
+                       + std::to_string(mapfP->comp_time) + " ms",
+                       x, y+=15);
+  font_info.drawString("soc: " + std::to_string(mapfP->soc)
+                       + ", makespan: " + std::to_string(mapfP->makespan),
+                       x, y+=15);
 
   if (flg_snapshot) {
     ofEndSaveScreenAsPDF();

@@ -3,6 +3,7 @@
 #include "graph.hpp"
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "mapfplan.hpp"
 
 class ofApp : public ofBaseApp
 {
@@ -12,6 +13,8 @@ public:
   const int N;        // number of agents
   const int T;        // makespan
   const Config goals;
+
+  MAPFPlan* mapfP;
 
   // size
   const int scale;
@@ -33,6 +36,7 @@ public:
 
   // font
   ofTrueTypeFont font;
+  ofTrueTypeFont font_info;
 
   // gui
   ofxFloatSlider timestep_slider;
@@ -58,5 +62,5 @@ public:
   void dragEvent(ofDragInfo dragInfo);
   void gotMessage(ofMessage msg);
 
-  ofApp(Graph* _G, Solution* _P);
+  ofApp(Graph* _G, Solution* _P, MAPFPlan* _mapfP);
 };

@@ -39,3 +39,4 @@
 **/.DS_Store
 /build/
 /obj/
+/third_party/openFramewoks/
