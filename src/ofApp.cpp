@@ -220,7 +220,7 @@ void ofApp::draw()
   font_info.drawString("agents: "
                        + std::to_string(mapfP->num_agents), 
                        x, y+=15);
-  font_info.drawString("comp_time: "
+  font_info.drawString("plan complete time: "
                        + std::to_string(mapfP->comp_time) + " ms",
                        x, y+=15);
   font_info.drawString("soc: " + std::to_string(mapfP->soc)

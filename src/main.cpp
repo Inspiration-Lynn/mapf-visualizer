@@ -2,27 +2,27 @@
 #include <iostream>
 #include <regex>
 
+#include "../include/mapfplan.hpp"
 #include "../include/ofApp.hpp"
 #include "ofMain.h"
-#include "../include/mapfplan.hpp"
 
 const std::regex r_config = std::regex(R"(^\d+:(.+))");
 const std::regex r_pos = std::regex(R"(\((\d+),(\d+)\),)");
-
 
 void readSetResult(const std::string& result_file, MAPFPlan* plan)
 {
   std::ifstream file(result_file);
   if (!file) {
-    std::cout << "error@main," << "file " << result_file << " is not found." << std::endl;
+    std::cout << "error@main," << "file " << result_file << " is not found."
+              << std::endl;
     std::exit(1);
   };
 
-  std::regex r_agents    = std::regex(R"(agents=(.+))");
-  std::regex r_solver    = std::regex(R"(solver=(.+))");
-  std::regex r_solved    = std::regex(R"(solved=(\d))");
-  std::regex r_soc       = std::regex(R"(soc=(\d+))");
-  std::regex r_makespan  = std::regex(R"(makespan=(\d+))");
+  std::regex r_agents = std::regex(R"(agents=(.+))");
+  std::regex r_solver = std::regex(R"(solver=(.+))");
+  std::regex r_solved = std::regex(R"(solved=(\d))");
+  std::regex r_soc = std::regex(R"(soc=(\d+))");
+  std::regex r_makespan = std::regex(R"(makespan=(\d+))");
   std::regex r_comp_time = std::regex(R"(comp_time=(\d+))");
 
   std::string line;
@@ -61,9 +61,7 @@ void readSetResult(const std::string& result_file, MAPFPlan* plan)
   }
 }
 
-
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   // simple arguments check
   if (argc != 3 || !std::ifstream(argv[1]) || !std::ifstream(argv[2])) {
@@ -92,8 +90,10 @@ int main(int argc, char *argv[])
       auto iter = s.cbegin();
       while (std::regex_search(iter, s.cend(), m, r_pos)) {
         iter = m[0].second;
-        auto x = std::stoi(m[1].str());
-        auto y = std::stoi(m[2].str());
+        auto y = std::stoi(m[1].str());
+        auto x = std::stoi(m[2].str());
+        // auto x = std::stoi(m[1].str());
+        // auto y = std::stoi(m[2].str());
         c.push_back(G.U[G.width * y + x]);
       }
       solution.push_back(c);
